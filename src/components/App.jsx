@@ -1,4 +1,3 @@
-// import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
 import ContactForm from './contactForm';
@@ -12,20 +11,10 @@ import {
   filterMyContact,
 } from 'redux/contactsSlice';
 
-// const LS_KEY = 'contactsArray';
-
 export default function App() {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
-  // const [contacts, setContacts] = useState(
-  //   JSON.parse(window.localStorage.getItem(LS_KEY)) ?? []
-  // );
-  // const [filter, setFilter] = useState('');
-
-  // useEffect(() => {
-  //   window.localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-  // }, [contacts]);
 
   const addContact = (name, number) => {
     const isExist = contacts.find(contact => contact.name === name);
@@ -41,13 +30,11 @@ export default function App() {
       number,
     };
 
-    // setContacts([contact, ...contacts]);
     dispatch(addMyContact(contact));
   };
 
   const changeFilter = event => {
     dispatch(filterMyContact(event.currentTarget.value));
-    // setFilter(event.currentTarget.value);
   };
 
   const filterContacts = () => {
@@ -58,7 +45,6 @@ export default function App() {
   };
 
   const deleteContact = contactId => {
-    // setContacts(state => state.filter(contact => contact.id !== contactId));
     dispatch(deleteMyContact(contactId));
   };
 
