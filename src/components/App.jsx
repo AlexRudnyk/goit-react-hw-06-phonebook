@@ -1,21 +1,31 @@
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
 import ContactForm from './contactForm';
 import ContactList from './contactList';
 import Filter from './filter';
 import { AppTitle, ListTitle, Container } from './App.styled';
+import { getContacts, getFilter } from 'redux/contactsSlice';
+import {
+  addMyContact,
+  deleteMyContact,
+  filterMyContact,
+} from 'redux/contactsSlice';
 
-const LS_KEY = 'contactsArray';
+// const LS_KEY = 'contactsArray';
 
 export default function App() {
-  const [contacts, setContacts] = useState(
-    JSON.parse(window.localStorage.getItem(LS_KEY)) ?? []
-  );
-  const [filter, setFilter] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  // const [contacts, setContacts] = useState(
+  //   JSON.parse(window.localStorage.getItem(LS_KEY)) ?? []
+  // );
+  // const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    window.localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+  // useEffect(() => {
+  //   window.localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+  // }, [contacts]);
 
   const addContact = (name, number) => {
     const isExist = contacts.find(contact => contact.name === name);
@@ -31,22 +41,25 @@ export default function App() {
       number,
     };
 
-    setContacts([contact, ...contacts]);
+    // setContacts([contact, ...contacts]);
+    dispatch(addMyContact(contact));
   };
 
   const changeFilter = event => {
-    setFilter(event.currentTarget.value);
+    dispatch(filterMyContact(event.currentTarget.value));
+    // setFilter(event.currentTarget.value);
   };
 
   const filterContacts = () => {
-    const normalizedFilter = filter.toLocaleLowerCase();
+    const normalizedFilter = filter.toLowerCase();
     return contacts.filter(({ name }) =>
       name.toLowerCase().includes(normalizedFilter)
     );
   };
 
   const deleteContact = contactId => {
-    setContacts(state => state.filter(contact => contact.id !== contactId));
+    // setContacts(state => state.filter(contact => contact.id !== contactId));
+    dispatch(deleteMyContact(contactId));
   };
 
   return (
